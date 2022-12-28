@@ -33,16 +33,19 @@ export default function TimeTable() {
           <div className="timetable-item">
             <h5>
               {" "}
+              {String(
+                Math.floor(
+                  e.tripUpdate.stopTimeUpdate[
+                    e.tripUpdate.stopTimeUpdate.length - 1
+                  ].arrival.delay / 60
+                )
+              ).replace("NaN", "N/A ")}
+              min{" "}
               {e.tripUpdate.stopTimeUpdate[
                 e.tripUpdate.stopTimeUpdate.length - 1
-              ].arrival !== NaN
-                ? Math.floor(
-                    e.tripUpdate.stopTimeUpdate[
-                      e.tripUpdate.stopTimeUpdate.length - 1
-                    ].arrival.delay / 60
-                  )
-                : null}
-              min
+              ].arrival > 0
+                ? "early"
+                : "late"}
             </h5>
             <div
               className={
