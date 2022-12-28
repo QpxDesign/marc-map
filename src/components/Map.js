@@ -39,7 +39,7 @@ export default function Map() {
     );
   });
   async function getData() {
-    fetch("http://localhost:9000/mtaAPI")
+    fetch("https://marc-api-production.up.railway.app/mtaAPI")
       .then((r) => r.json())
       .then((r2) => setRes(r2))
       .catch((err) => err);
