@@ -28,8 +28,8 @@
   },
   "browserslist": {
     "production": [
-      "not op_mini all",
       "defaults",
+      "not op_mini all",
       "not ie 11"
     ],
     "development": [
