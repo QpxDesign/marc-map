@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="home-wrapper">
+      <div className="home-wrapper a">
         <Map />
         <TimeTable />
       </div>
