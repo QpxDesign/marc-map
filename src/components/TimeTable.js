@@ -8,7 +8,7 @@ export default function TimeTable() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:9000/tripUpdatesAPI")
+    fetch("https://marc-api-production.up.railway.app/tripUpdatesAPI")
       .then((res) => res.json())
       .then(
         (result) => {
