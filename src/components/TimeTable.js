@@ -1,28 +1,74 @@
 import React, { useEffect, useState } from "react";
+import StopData from "../assets/StopData.json";
+import RouteData from "../assets/RouteData.json";
 
 export default function TimeTable() {
   const [res, setRes] = useState([]);
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:9000/tripUpdatesAPI")
-      .then((r) => r.json())
-      .then((r2) => setRes(r2))
-      .then((r3) => console.log(r3));
-    console.log(res);
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          console.log(result.entity);
+          setIsLoaded(true);
+          setRes(result.entity);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      );
   }, []);
   return (
     <div className="timetable-wrapper">
       <h1>Timetable</h1>
-      {res.entity !== undefined
-        ? res.entity.map((e) => {
-            <div className="timetable-item">
-              <div className="status-light" />
-              <h2></h2>
-            </div>;
-          })
-        : null}
-
-      <div></div>
+      {isLoaded === true ? (
+        res.map((e, index) => (
+          <div className="timetable-item">
+            <h5>
+              {" "}
+              {e.tripUpdate.stopTimeUpdate[
+                e.tripUpdate.stopTimeUpdate.length - 1
+              ].arrival !== NaN
+                ? Math.floor(
+                    e.tripUpdate.stopTimeUpdate[
+                      e.tripUpdate.stopTimeUpdate.length - 1
+                    ].arrival.delay / 60
+                  )
+                : null}
+              min
+            </h5>
+            <div
+              className={
+                e.tripUpdate.stopTimeUpdate[
+                  e.tripUpdate.stopTimeUpdate.length - 1
+                ].arrival.delay /
+                  60 >=
+                5
+                  ? "status-light red"
+                  : "status-light green"
+              }
+            />
+            <h2>{e.tripUpdate.trip.tripId.replace("Train", "Train ")}</h2>
+            <h2>
+              {
+                RouteData.filter(
+                  (route) => route.id == e.tripUpdate.trip.routeId
+                )[0].route_name
+              }{" "}
+              Line
+            </h2>
+          </div>
+        ))
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 }

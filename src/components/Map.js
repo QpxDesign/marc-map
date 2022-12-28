@@ -28,6 +28,15 @@ export default function Map() {
       center: [lng, lat],
       zoom: zoom,
     });
+    map.current.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+        showUserHeading: true,
+      })
+    );
   });
   async function getData() {
     fetch("http://localhost:9000/mtaAPI")
@@ -35,6 +44,7 @@ export default function Map() {
       .then((r2) => setRes(r2))
       .catch((err) => err);
   }
+  //
   // populate maps with stop and line data
   useEffect(() => {
     getData();
@@ -190,8 +200,8 @@ export default function Map() {
 
     return () => clearInterval(interval);
   }, []);
-  // add trains to map to map
 
+  // add trains to map to map
   useEffect(() => {
     if (res.length !== 0) {
       res.entity.map((train) => {
@@ -218,7 +228,7 @@ export default function Map() {
                 }) // add popups
                   .setHTML(
                     `<div class="trainPopup">
-                <h3>${train.vehicle.trip.tripId}</h3>
+                <h3>${train.vehicle.trip.tripId.replace("Train", "Train ")}</h3>
                 </div>
                 `
                   )

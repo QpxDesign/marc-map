@@ -74,6 +74,9 @@ header {
   color: white;
   flex: 0.3;
   background-color: black;
+  padding-bottom: 1em;
+
+  gap: 1em;
 }
 .status-light {
   width: 1em;
@@ -101,13 +104,29 @@ header {
   }
 }
 .timetable-item {
+  flex-wrap: wrap;
   font-family: monospace;
   align-items: center;
   justify-content: center;
-  gap: 0.75em;
+  grid-gap: 0em 1em;
+  letter-spacing: 0.1em;
   display: flex;
   flex-direction: row;
+  padding: 0 0.3em;
+  border-radius: 1em;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.trainPopup {
+  font-size: 1em;
+  width: 7em;
 }
 .trainPopup h3 {
   color: white !important;
+}
+.timetable-item h5 {
+  font-size: 1.25em;
+  font-weight: 100;
+}
+.green {
+  background-color: green;
 }
