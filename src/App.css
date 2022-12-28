@@ -1,38 +1,113 @@
-.App {
-  text-align: center;
+body {
+  padding: 0;
+  margin: 0;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.alerts-wrapper {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1em;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.map-container {
+  overflow: hidden !important;
+  height: 90vh !important;
+  width: 100%;
+  flex: 0.7;
+}
+header {
+  font-family: montserrat, sans-serif;
+  width: 100%;
+  background-color: #f97316;
+  font-weight: 600;
+  font-size: 2.5em;
+  color: white;
+  padding: 0.25em 0.5em;
+}
+@media screen and (max-width: 600px) {
+  header {
+    font-size: 2em;
   }
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.home-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.mapboxgl-marker {
+  z-index: 0 !important;
+}
+.marker-icon {
+  height: 5em;
+  width: 5em;
+  aspect-ratio: 1/1;
+  background-size: 100%;
+  background-image: url("../public/assets/train-icon.png") !important;
+}
+.stopPopup,
+.trainPopup {
+  background-color: #004d93;
+  padding: 0em 1em;
+  position: absolute;
+  z-index: 1 !important;
+  border-radius: 1em !important;
+}
+.stopPopup h1 {
+  font-size: 1.75em !important;
+  font-weight: 300;
+  line-height: 1em;
+  color: white;
+  width: 10em;
+}
+.mapboxgl-popup-close-button {
+  background-color: #f97316 !important;
+  font-size: 2.2em !important;
+  position: absolute !;
+  z-index: 999;
+  border-radius: 10000% !important;
+  color: white !important;
+  fill: #f97316 !important;
+}
+.timetable-wrapper {
+  font-family: montserrat, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: flex-start;
   color: white;
+  flex: 0.3;
+  background-color: black;
 }
-
-.App-link {
-  color: #61dafb;
+.status-light {
+  width: 1em;
+  height: 1em;
+  border-radius: 100%;
+  background-color: red;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.timetable-wrapper h1 {
+  margin-bottom: 0;
+}
+.timetable-wrapper h2 {
+  font-size: 2em;
+  font-weight: 500;
+}
+@media screen and (max-width: 800px) {
+  .home-wrapper {
+    display: block;
   }
-  to {
-    transform: rotate(360deg);
+  .map-container {
+    margin: 0;
   }
+  .timetable-wrapper {
+    margin: 0;
+    overflow: hidden;
+  }
+}
+.timetable-item {
+  font-family: monospace;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75em;
+  display: flex;
+  flex-direction: row;
+}
+.trainPopup h3 {
+  color: white !important;
 }
