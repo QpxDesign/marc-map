@@ -37,6 +37,7 @@ export default function Map() {
         showUserHeading: true,
       })
     );
+    map.current.addControl(new mapboxgl.NavigationControl());
   });
   async function getData() {
     fetch("https://marc-api-production.up.railway.app/mtaAPI")

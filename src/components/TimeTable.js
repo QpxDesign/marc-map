@@ -34,10 +34,12 @@ export default function TimeTable() {
             <h5>
               {" "}
               {String(
-                Math.floor(
-                  e.tripUpdate.stopTimeUpdate[
-                    e.tripUpdate.stopTimeUpdate.length - 1
-                  ].arrival.delay / 60
+                Math.abs(
+                  Math.floor(
+                    e.tripUpdate.stopTimeUpdate[
+                      e.tripUpdate.stopTimeUpdate.length - 1
+                    ].arrival.delay / 60
+                  )
                 )
               ).replace("NaN", "N/A ")}
               min{" "}
