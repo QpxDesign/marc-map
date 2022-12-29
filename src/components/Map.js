@@ -203,7 +203,7 @@ export default function Map() {
 
   // add trains to map to map
   useEffect(() => {
-    if (res.length !== 0) {
+    if (res.length !== 0 && res.entity !== undefined && res !== null) {
       res.entity.map((train) => {
         const latitude = train.vehicle.position.latitude;
         const longitude = train.vehicle.position.longitude;
