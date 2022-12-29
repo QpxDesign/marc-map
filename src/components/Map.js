@@ -292,7 +292,16 @@ export default function Map() {
                              CustomFilter(train.vehicle.trip.tripId)
                          )[0].stop_name
                        : "n/a"
-                   }
+                   }</h4>
+                     <h4>Arriving at: ${formatTime(
+                       tripUpdatesRes.entity
+                         .filter(
+                           (trip) =>
+                             trip.tripUpdate.trip.tripId ===
+                             train.vehicle.trip.tripId
+                         )[0]
+                         .tripUpdate.stopTimeUpdate.at(-1).arrival.time
+                     )}</h4>
                 <h4>Final Stop: ${
                   StopData.filter(
                     (stop) =>
@@ -305,7 +314,7 @@ export default function Map() {
                         )[0]
                         .tripUpdate.stopTimeUpdate.at(-1).stopId
                   )[0].stop_name
-                }
+                }</h4>
                   <h4>Currently: ${
                     tripUpdatesRes.entity
                       .filter(
@@ -346,16 +355,7 @@ export default function Map() {
                           ? " Early"
                           : " Late")
                       : "On Time"
-                  }
-                  <h4>Arriving at: ${formatTime(
-                    tripUpdatesRes.entity
-                      .filter(
-                        (trip) =>
-                          trip.tripUpdate.trip.tripId ===
-                          train.vehicle.trip.tripId
-                      )[0]
-                      .tripUpdate.stopTimeUpdate.at(-1).arrival.time
-                  )}</h4>
+                  }</h4>
                   <span class="last-updated" style="margin-left:auto">Last Updated: ${formatTime(
                     tripUpdatesRes.header.timestamp
                   )}</span>

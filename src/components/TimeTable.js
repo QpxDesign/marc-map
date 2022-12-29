@@ -16,9 +16,7 @@ export default function TimeTable() {
           setIsLoaded(true);
           setRes(result.entity);
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
+
         (error) => {
           setIsLoaded(true);
           setError(error);
