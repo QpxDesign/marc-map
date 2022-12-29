@@ -64,6 +64,7 @@ header {
   z-index: 999;
   width: 25px;
   height: 25px;
+  padding: 0px !important;
   border-radius: 10000% !important;
   color: white !important;
   fill: #f97316 !important;
@@ -122,12 +123,30 @@ header {
   background-color: rgba(255, 255, 255, 0.1);
 }
 .trainPopup {
-  font-size: 1em;
-  width: 7em;
+  display: flex;
+  flex-direction: column;
+  width: 20em;
+  padding: 1em 1em;
+  gap: 0.5em;
 }
 .trainPopup h3 {
+  font-size: 1.75em;
   color: white !important;
+  margin: 0;
 }
+.trainPopup h4 {
+  color: white !important;
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 300 !important;
+}
+.trainPopup .last-updated {
+  color: white !important;
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 300 !important;
+}
+
 .timetable-item h5 {
   font-size: 1.25em;
   font-weight: 100;

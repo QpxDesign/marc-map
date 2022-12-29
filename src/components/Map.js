@@ -13,6 +13,7 @@ mapboxgl.accessToken =
 export default function Map() {
   const [trains, setTrains] = useState([]);
   const [res, setRes] = useState([]);
+  const [tripUpdatesRes, setTripUpdatesRes] = useState([]);
   // map params
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -45,10 +46,17 @@ export default function Map() {
       .then((r2) => setRes(r2))
       .catch((err) => err);
   }
+  async function getTripUpdatesData() {
+    fetch("https://marc-api-production.up.railway.app/TripUpdatesAPI")
+      .then((r) => r.json())
+      .then((r2) => setTripUpdatesRes(r2))
+      .catch((err) => err);
+  }
   //
   // populate maps with stop and line data
   useEffect(() => {
     getData();
+    getTripUpdatesData();
     StopData.map((stop) => {
       const latitude = stop.stop_lat;
       const longitude = stop.stop_lon;
@@ -194,17 +202,31 @@ export default function Map() {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
   }
+
+  function formatTime(s) {
+    const dtFormat = new Intl.DateTimeFormat("en-US", {
+      timeStyle: "short",
+      timeZone: "America/New_York",
+    });
+
+    return dtFormat.format(new Date(s * 1e3));
+  }
   useEffect(() => {
     const interval = setInterval(() => {
       getData();
-    }, 15000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   // add trains to map to map
   useEffect(() => {
-    if (res.length !== 0 && res.entity !== undefined && res !== null) {
+    if (
+      res.length !== 0 &&
+      res.entity !== undefined &&
+      res !== null &&
+      tripUpdatesRes.entity !== undefined
+    ) {
       res.entity.map((train) => {
         const latitude = train.vehicle.position.latitude;
         const longitude = train.vehicle.position.longitude;
@@ -214,6 +236,7 @@ export default function Map() {
         );
         if (result !== undefined && result.length !== 0) {
           result.marker.setLngLat([longitude, latitude]);
+          result.marker.setRotation(train.vehicle.position.bearing);
         } else {
           setTrains((current) => [...current, train.vehicle.trip.tripId]);
           icon.className = "marker-icon";
@@ -230,6 +253,72 @@ export default function Map() {
                   .setHTML(
                     `<div class="trainPopup">
                 <h3>${train.vehicle.trip.tripId.replace("Train", "Train ")}</h3>
+                <h4>Next Stop: ${
+                  StopData.filter(
+                    (stop) =>
+                      stop.stop_id ==
+                      tripUpdatesRes.entity
+                        .filter(
+                          (trip) =>
+                            trip.tripUpdate.trip.tripId ===
+                            train.vehicle.trip.tripId
+                        )[0]
+                        .tripUpdate.stopTimeUpdate.at(-1).stopId
+                  )[0].stop_name
+                }
+                  <h4>Currently: ${
+                    tripUpdatesRes.entity
+                      .filter(
+                        (trip) =>
+                          trip.tripUpdate.trip.tripId ===
+                          train.vehicle.trip.tripId
+                      )[0]
+                      .tripUpdate.stopTimeUpdate.at(-1).arrival.delay !==
+                    undefined
+                      ? Math.abs(
+                          Math.round(
+                            tripUpdatesRes.entity
+                              .filter(
+                                (trip) =>
+                                  trip.tripUpdate.trip.tripId ===
+                                  train.vehicle.trip.tripId
+                              )[0]
+                              .tripUpdate.stopTimeUpdate.at(-1).arrival.delay /
+                              60
+                          )
+                        ) +
+                        (tripUpdatesRes.entity
+                          .filter(
+                            (trip) =>
+                              trip.tripUpdate.trip.tripId ===
+                              train.vehicle.trip.tripId
+                          )[0]
+                          .tripUpdate.stopTimeUpdate.at(-1).arrival.delay === 1
+                          ? " Minute"
+                          : " Minutes") +
+                        (tripUpdatesRes.entity
+                          .filter(
+                            (trip) =>
+                              trip.tripUpdate.trip.tripId ===
+                              train.vehicle.trip.tripId
+                          )[0]
+                          .tripUpdate.stopTimeUpdate.at(-1).arrival.delay >= 0
+                          ? " Early"
+                          : " Late")
+                      : "On Time"
+                  }
+                  <h4>Arriving at: ${formatTime(
+                    tripUpdatesRes.entity
+                      .filter(
+                        (trip) =>
+                          trip.tripUpdate.trip.tripId ===
+                          train.vehicle.trip.tripId
+                      )[0]
+                      .tripUpdate.stopTimeUpdate.at(-1).arrival.time
+                  )}</h4>
+                  <span class="last-updated" style="margin-left:auto">Last Updated: ${formatTime(
+                    tripUpdatesRes.header.timestamp
+                  )}</span>
                 </div>
                 `
                   )
@@ -246,6 +335,5 @@ export default function Map() {
       });
     }
   }, [res]);
-
   return <div className="map-container" ref={mapContainer} />;
 }
