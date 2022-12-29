@@ -211,9 +211,39 @@ export default function Map() {
 
     return dtFormat.format(new Date(s * 1e3));
   }
+  function CustomFilter(tripId) {
+    if (tripUpdatesRes.entity[0].tripUpdate === undefined) {
+      return "error";
+    }
+    const stopObject = tripUpdatesRes.entity.find(
+      (e) => e.tripUpdate.trip.tripId === tripId
+    ).tripUpdate.stopTimeUpdate;
+    if (stopObject === undefined) return "error";
+
+    for (var index = 0; index < stopObject.length; index++) {
+      const timestamp = tripUpdatesRes.header.timestamp;
+      if (
+        stopObject.at(index).departure !== undefined &&
+        stopObject.at(index).arrival !== undefined &&
+        index !== stopObject.length - 1
+      ) {
+        if (
+          stopObject.at(index).departure.time <= timestamp &&
+          stopObject.at(index + 1).arrival.time >= timestamp
+        ) {
+          console.log(stopObject.at(index).stopId);
+          return stopObject.at(index + 1).stopId;
+        }
+      }
+    }
+
+    return "404";
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       getData();
+      getTripUpdatesData();
     }, 5000);
 
     return () => clearInterval(interval);
@@ -253,7 +283,17 @@ export default function Map() {
                   .setHTML(
                     `<div class="trainPopup">
                 <h3>${train.vehicle.trip.tripId.replace("Train", "Train ")}</h3>
-                <h4>Next Stop: ${
+                   <h4>Next Stop: ${
+                     CustomFilter(train.vehicle.trip.tripId) !== "error" &&
+                     CustomFilter(train.vehicle.trip.tripId) !== "404"
+                       ? StopData.filter(
+                           (stop) =>
+                             stop.stop_id ==
+                             CustomFilter(train.vehicle.trip.tripId)
+                         )[0].stop_name
+                       : "n/a"
+                   }
+                <h4>Final Stop: ${
                   StopData.filter(
                     (stop) =>
                       stop.stop_id ==
