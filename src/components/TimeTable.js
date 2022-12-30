@@ -63,7 +63,6 @@ export default function TimeTable() {
     ) {
       return false;
     }
-    console.log(res);
     var stopObject = [];
 
     var stopObject = res.find((e) => e.tripUpdate.trip.tripId === tripId)
