@@ -130,19 +130,23 @@ header {
   max-width: 90%;
   background-color: rgba(255, 255, 255, 0.1);
 }
-.trainPopup {
+.trainPopup,
+.stopPopup {
   display: flex;
   flex-direction: column;
   width: 20em;
   padding: 1em 1em;
   gap: 0.5em;
 }
-.trainPopup h3 {
+.trainPopup h3,
+.stopPopup h1 {
+  font-weight: 800;
   font-size: 1.75em;
   color: white !important;
   margin: 0;
 }
-.trainPopup h4 {
+.trainPopup h4,
+.stopPopup h2 {
   color: white !important;
   margin: 0;
   font-size: 1.5em;
@@ -174,7 +178,8 @@ header {
 .detailedview-background {
   overflow: hidden !important;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  height: fit-content;
   position: absolute;
   right: 0;
   top: 0;
@@ -202,6 +207,7 @@ header {
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
+  padding-bottom: 2em !important;
   margin-right: -2px;
   overflow-y: scroll;
 }
@@ -217,6 +223,7 @@ header {
   display: flex;
   flex-direction: column;
   grid-gap: 1em;
+  padding-bottom: 2em;
 }
 .detailedview-wrapper li {
   font-size: 1.1em;
@@ -242,6 +249,8 @@ header {
   }
   .detailedview-wrapper {
     width: 100%;
-    height: 300vh;
   }
+}
+.stopPopup {
+  width: 40em;
 }

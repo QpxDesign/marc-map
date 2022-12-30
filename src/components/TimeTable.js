@@ -55,36 +55,6 @@ export default function TimeTable() {
     d.replace("AM", "\n AM");
     return d;
   }
-  function CustomFilter(tripId) {
-    if (
-      res.length === 0 ||
-      res[0].tripUpdate === undefined ||
-      res[0].tripUpdate.timestamp === undefined
-    ) {
-      return false;
-    }
-    var stopObject = [];
-
-    var stopObject = res.find((e) => e.tripUpdate.trip.tripId === tripId)
-      .tripUpdate.stopTimeUpdate;
-
-    for (var index = 0; index < stopObject.length; index++) {
-      const timestamp = res[0].tripUpdate.timestamp;
-      if (
-        stopObject.at(index).departure !== undefined &&
-        stopObject.at(index).arrival !== undefined &&
-        index !== stopObject.length - 1
-      ) {
-        if (
-          stopObject.at(index).departure.time <= timestamp &&
-          stopObject.at(index + 1).arrival.time >= timestamp
-        ) {
-          return stopObject.at(index + 1);
-        }
-      }
-    }
-    return false;
-  }
   return (
     <>
       <div className={showDetailedView ? "detailedview-wrapper" : "hide"}>
@@ -113,20 +83,11 @@ export default function TimeTable() {
             ? DetailedViewTrain.tripUpdate.stopTimeUpdate.map((stop, index) => (
                 <li
                   className={
-                    DetailedViewTrain.tripUpdate !== undefined &&
-                    (CustomFilter(
-                      DetailedViewTrain.tripUpdate.trip.tripId,
-                      stop.stopId
-                    ).arrival !==
-                      undefined) &
-                      (stop.arrival !== undefined)
-                      ? CustomFilter(
-                          DetailedViewTrain.tripUpdate.trip.tripId,
-                          stop.stopId
-                        ).arrival.time >= stop.arrival.time
+                    stop.arrival !== undefined
+                      ? stop.arrival.time <= Date.now() / 1000
                         ? "disabled"
                         : ""
-                      : "/"
+                      : ""
                   }
                 >
                   <div
@@ -182,7 +143,7 @@ export default function TimeTable() {
       <div
         className={showDetailedView ? "detailedview-background" : "hide"}
       ></div>
-      <div className="timetable-wrapper">
+      <div className={showDetailedView ? "hide" : "timetable-wrapper"}>
         <h1>Timetable</h1>
         {isLoaded === true ? (
           res.map((e, index) => (
