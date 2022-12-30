@@ -231,7 +231,6 @@ export default function Map() {
           stopObject.at(index).departure.time <= timestamp &&
           stopObject.at(index + 1).arrival.time >= timestamp
         ) {
-          console.log(stopObject.at(index).stopId);
           return stopObject.at(index + 1).stopId;
         }
       }
