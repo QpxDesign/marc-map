@@ -69,6 +69,27 @@ export default function Map() {
       return "error";
     }
   }
+  function findDelayTime(tripId) {
+    try {
+      const delay = Math.abs(
+        Math.round(
+          tripUpdatesRes.entity
+            .filter((trip) => trip.tripUpdate.trip.tripId === tripId)[0]
+            .tripUpdate.stopTimeUpdate.at(-1).arrival.delay / 60
+        )
+      );
+      const TimeMessage =
+        tripUpdatesRes.entity
+          .filter((trip) => trip.tripUpdate.trip.tripId === tripId)[0]
+          .tripUpdate.stopTimeUpdate.at(-1).arrival.delay >= 0
+          ? " Early"
+          : " Late";
+      return delay + " Minutes" + TimeMessage;
+    } catch (e) {
+      return "error";
+    }
+  }
+
   // populate maps with stop and line data
   useEffect(() => {
     getData();
@@ -325,47 +346,9 @@ export default function Map() {
                          : "n/a"
                      }
                 <h4>Final Stop: ${FindFinalStop(train.vehicle.trip.tripId)}</h4>
-                  <h4>Currently: ${
-                    tripUpdatesRes.entity
-                      .filter(
-                        (trip) =>
-                          trip.tripUpdate.trip.tripId ===
-                          train.vehicle.trip.tripId
-                      )[0]
-                      .tripUpdate.stopTimeUpdate.at(-1).arrival.delay !==
-                    undefined
-                      ? Math.abs(
-                          Math.round(
-                            tripUpdatesRes.entity
-                              .filter(
-                                (trip) =>
-                                  trip.tripUpdate.trip.tripId ===
-                                  train.vehicle.trip.tripId
-                              )[0]
-                              .tripUpdate.stopTimeUpdate.at(-1).arrival.delay /
-                              60
-                          )
-                        ) +
-                        (tripUpdatesRes.entity
-                          .filter(
-                            (trip) =>
-                              trip.tripUpdate.trip.tripId ===
-                              train.vehicle.trip.tripId
-                          )[0]
-                          .tripUpdate.stopTimeUpdate.at(-1).arrival.delay === 1
-                          ? " Minute"
-                          : " Minutes") +
-                        (tripUpdatesRes.entity
-                          .filter(
-                            (trip) =>
-                              trip.tripUpdate.trip.tripId ===
-                              train.vehicle.trip.tripId
-                          )[0]
-                          .tripUpdate.stopTimeUpdate.at(-1).arrival.delay >= 0
-                          ? " Early"
-                          : " Late")
-                      : "On Time"
-                  }</h4>
+                  <h4>Currently: ${findDelayTime(
+                    train.vehicle.trip.tripId
+                  )}</h4>
                   <span class="last-updated" style="margin-left:auto">Last Updated: ${formatTime(
                     tripUpdatesRes.header.timestamp
                   )}</span>
