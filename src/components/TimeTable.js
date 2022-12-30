@@ -33,7 +33,7 @@ export default function TimeTable() {
   }
 
   function handleDetailedViewEnable(tripId) {
-    window.scrollTo(0, 0);
+    window.scroll(0, 0);
     document.body.classList.add("noscroll");
     window.scrollTo(0, 0);
     setShowDetailedView(true);
