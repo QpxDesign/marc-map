@@ -52,7 +52,23 @@ export default function Map() {
       .then((r2) => setTripUpdatesRes(r2))
       .catch((err) => err);
   }
-  //
+  function FindFinalStop(tripId) {
+    try {
+      return StopData.find(
+        (stop) =>
+          stop.stop_id ==
+          tripUpdatesRes.entity
+            .find(
+              (trip) =>
+                trip.tripUpdate !== undefined &&
+                trip.tripUpdate.trip.tripId == tripId
+            )
+            .tripUpdate.stopTimeUpdate.at(-1).stopId
+      ).stop_name;
+    } catch (e) {
+      return "error";
+    }
+  }
   // populate maps with stop and line data
   useEffect(() => {
     getData();
@@ -308,20 +324,7 @@ export default function Map() {
                            )
                          : "n/a"
                      }
-                <h4>Final Stop: ${
-                  StopData.filter(
-                    (stop) =>
-                      stop.stop_id ==
-                      tripUpdatesRes.entity
-                        .filter(
-                          (trip) =>
-                            trip.tripUpdate !== undefined &&
-                            trip.tripUpdate.trip.tripId ===
-                              train.vehicle.trip.tripId
-                        )[0]
-                        .tripUpdate.stopTimeUpdate.at(-1).stopId
-                  )[0].stop_name
-                }</h4>
+                <h4>Final Stop: ${FindFinalStop(train.vehicle.trip.tripId)}</h4>
                   <h4>Currently: ${
                     tripUpdatesRes.entity
                       .filter(
