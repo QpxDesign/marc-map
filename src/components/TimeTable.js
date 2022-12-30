@@ -33,16 +33,15 @@ export default function TimeTable() {
   }
 
   function handleDetailedViewEnable(tripId) {
+    document.body.classList.add("noscroll");
     window.scrollTo(0, 0);
     setShowDetailedView(true);
     setDetailedViewTrain(tripId);
   }
   function handleDetailedViewDisable() {
+    document.body.classList.remove("noscroll");
     setShowDetailedView(false);
     setDetailedViewTrain("");
-    window.onscroll = function () {
-      window.scrollTo(0, 0);
-    };
   }
   function formatTime(s) {
     const dtFormat = new Intl.DateTimeFormat("en-US", {
@@ -55,12 +54,37 @@ export default function TimeTable() {
     d.replace("AM", "\n AM");
     return d;
   }
-
-  window.onscroll = () => {
-    if (showDetailedView) {
-      window.scroll(0, 0);
+  function CustomFilter(tripId) {
+    if (
+      res.length === 0 ||
+      res[0].tripUpdate === undefined ||
+      res[0].tripUpdate.timestamp === undefined
+    ) {
+      return false;
     }
-  };
+    console.log(res);
+    var stopObject = [];
+
+    var stopObject = res.find((e) => e.tripUpdate.trip.tripId === tripId)
+      .tripUpdate.stopTimeUpdate;
+
+    for (var index = 0; index < stopObject.length; index++) {
+      const timestamp = res[0].tripUpdate.timestamp;
+      if (
+        stopObject.at(index).departure !== undefined &&
+        stopObject.at(index).arrival !== undefined &&
+        index !== stopObject.length - 1
+      ) {
+        if (
+          stopObject.at(index).departure.time <= timestamp &&
+          stopObject.at(index + 1).arrival.time >= timestamp
+        ) {
+          return stopObject.at(index + 1);
+        }
+      }
+    }
+    return false;
+  }
   return (
     <>
       <div className={showDetailedView ? "detailedview-wrapper" : "hide"}>
@@ -87,7 +111,24 @@ export default function TimeTable() {
         <ul>
           {DetailedViewTrain.tripUpdate !== undefined
             ? DetailedViewTrain.tripUpdate.stopTimeUpdate.map((stop, index) => (
-                <li>
+                <li
+                  className={
+                    DetailedViewTrain.tripUpdate !== undefined &&
+                    (CustomFilter(
+                      DetailedViewTrain.tripUpdate.trip.tripId,
+                      stop.stopId
+                    ).arrival !==
+                      undefined) &
+                      (stop.arrival !== undefined)
+                      ? CustomFilter(
+                          DetailedViewTrain.tripUpdate.trip.tripId,
+                          stop.stopId
+                        ).arrival.time >= stop.arrival.time
+                        ? "disabled"
+                        : ""
+                      : "/"
+                  }
+                >
                   <div
                     className={
                       DetailedViewTrain.tripUpdate.stopTimeUpdate[index]

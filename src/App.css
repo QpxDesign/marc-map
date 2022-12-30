@@ -172,9 +172,9 @@ header {
   display: none;
 }
 .detailedview-background {
-  overflow: hidden;
+  overflow: hidden !important;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   position: absolute;
   right: 0;
   top: 0;
@@ -183,8 +183,7 @@ header {
 .close-icon {
   font-size: 2.2em;
   position: absolute;
-  left: 0;
-  margin: 0.3em;
+  left: 0.4em;
 }
 .close-icon:hover {
   color: red;
@@ -204,6 +203,7 @@ header {
   align-items: center;
   gap: 0.5em;
   margin-right: -2px;
+  overflow-y: scroll;
 }
 .detailedview-wrapper h1 {
   margin: 0;
@@ -223,9 +223,16 @@ header {
   list-style: none;
   display: flex;
   gap: 1em;
+  max-width: 90%;
   align-items: center;
 }
 .detailedview-wrapper .time {
   display: flex;
   justify-content: center;
+}
+.disabled {
+  color: gray;
+}
+.noscroll {
+  overflow: hidden;
 }

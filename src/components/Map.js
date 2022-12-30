@@ -215,11 +215,16 @@ export default function Map() {
     if (tripUpdatesRes.entity[0].tripUpdate === undefined) {
       return "error";
     }
-    const stopObject = tripUpdatesRes.entity.find(
-      (e) => e.tripUpdate.trip.tripId === tripId
-    ).tripUpdate.stopTimeUpdate;
-    if (stopObject === undefined) return "error";
-
+    var stopObject = {};
+    try {
+      var stopObject = tripUpdatesRes.entity.find(
+        (e) => e.tripUpdate.trip.tripId === tripId
+      ).tripUpdate.stopTimeUpdate;
+      if (stopObject === undefined) return "error";
+    } catch (e) {
+      console.log(e);
+      return "error";
+    }
     for (var index = 0; index < stopObject.length; index++) {
       const timestamp = tripUpdatesRes.header.timestamp;
       if (
@@ -231,7 +236,7 @@ export default function Map() {
           stopObject.at(index).departure.time <= timestamp &&
           stopObject.at(index + 1).arrival.time >= timestamp
         ) {
-          return stopObject.at(index + 1).stopId;
+          return stopObject.at(index + 1);
         }
       }
     }
@@ -288,19 +293,21 @@ export default function Map() {
                        ? StopData.filter(
                            (stop) =>
                              stop.stop_id ==
-                             CustomFilter(train.vehicle.trip.tripId)
+                             CustomFilter(train.vehicle.trip.tripId).stopId
                          )[0].stop_name
                        : "n/a"
                    }</h4>
-                     <h4>Arriving at: ${formatTime(
-                       tripUpdatesRes.entity
-                         .filter(
-                           (trip) =>
-                             trip.tripUpdate.trip.tripId ===
-                             train.vehicle.trip.tripId
-                         )[0]
-                         .tripUpdate.stopTimeUpdate.at(-1).arrival.time
-                     )}</h4>
+                     <h4>Arriving at: ${
+                       CustomFilter(train.vehicle.trip.tripId) !== "error" &&
+                       CustomFilter(train.vehicle.trip.tripId) !== "404" &&
+                       CustomFilter(train.vehicle.trip.tripId).arrival !==
+                         undefined
+                         ? formatTime(
+                             CustomFilter(train.vehicle.trip.tripId).arrival
+                               .time
+                           )
+                         : "n/a"
+                     }
                 <h4>Final Stop: ${
                   StopData.filter(
                     (stop) =>
@@ -308,8 +315,9 @@ export default function Map() {
                       tripUpdatesRes.entity
                         .filter(
                           (trip) =>
+                            trip.tripUpdate !== undefined &&
                             trip.tripUpdate.trip.tripId ===
-                            train.vehicle.trip.tripId
+                              train.vehicle.trip.tripId
                         )[0]
                         .tripUpdate.stopTimeUpdate.at(-1).stopId
                   )[0].stop_name
