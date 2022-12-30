@@ -25,7 +25,7 @@ export default function Map() {
     const interval = setInterval(() => {
       getData();
       getTripUpdatesData();
-    }, 5000);
+    }, 15000);
 
     return () => clearInterval(interval);
   }, []);
@@ -230,6 +230,16 @@ export default function Map() {
       });
     }
   }, [res]);
+  function helper(obj, stop_id) {
+    for (var i = 0; i < obj.length; i++) {
+      if (obj[i].stopId == stop_id) {
+        if (obj[i].departure !== undefined) {
+          return formatTime(obj[i].departure.time);
+        }
+      }
+    }
+    return "error";
+  }
   function getTrainsFromStationId(stop_id) {
     // find results
     var results = [];
@@ -245,7 +255,6 @@ export default function Map() {
         if (
           tripUpdatesRes.entity[i].tripUpdate.stopTimeUpdate[i2].stopId ==
             stop_id &&
-          tripUpdatesRes.entity[i].tripUpdate.stopTimeUpdate[i2].stopId &&
           tripUpdatesRes.entity[i].tripUpdate.stopTimeUpdate[i2].departure !==
             undefined &&
           tripUpdatesRes.entity[i].tripUpdate.stopTimeUpdate[i2].departure
@@ -268,11 +277,11 @@ export default function Map() {
               (s) => s.stop_id == r.tripUpdate.stopTimeUpdate.at(-1).stopId
             ).stop_name
           : ""
-      } • Leaving ${formatTime(
-        r.tripUpdate.stopTimeUpdate.at(0).departure.time
-      )}</h2>`;
+      } • Arriving At ${helper(r.tripUpdate.stopTimeUpdate, stop_id)}</h2>`;
     });
-    return results_display.replaceAll("Train", "Train ");
+    if (results_display !== "")
+      return results_display.replaceAll("Train", "Train ");
+    return "No Train Is Currently On Its Way to this Station";
   }
   useEffect(() => {
     StopData.map((stop) => {

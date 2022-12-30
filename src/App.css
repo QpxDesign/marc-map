@@ -253,4 +253,5 @@ header {
 }
 .stopPopup {
   width: 40em;
+  max-width: 60vw;
 }
