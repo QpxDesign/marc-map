@@ -64,10 +64,9 @@ export default function TimeTable() {
         />
         <h1>
           {DetailedViewTrain.tripUpdate !== undefined
-            ? DetailedViewTrain.tripUpdate.trip.tripId.replace(
-                "Train",
-                "Train "
-              )
+            ? DetailedViewTrain.tripUpdate.trip.tripId
+                .replace("Train", "Train ")
+                .replace("Saturday", " Saturday")
             : "error"}
         </h1>
         <h2>
@@ -82,6 +81,7 @@ export default function TimeTable() {
           {DetailedViewTrain.tripUpdate !== undefined
             ? DetailedViewTrain.tripUpdate.stopTimeUpdate.map((stop, index) => (
                 <li
+                  key={index}
                   className={
                     stop.arrival !== undefined
                       ? stop.arrival.time <= Date.now() / 1000
@@ -100,7 +100,7 @@ export default function TimeTable() {
                           5
                           ? "status-light red"
                           : "status-light green"
-                        : "status-light green"
+                        : "status-light gray"
                     }
                   />
                   {DetailedViewTrain.tripUpdate.stopTimeUpdate[index]
@@ -145,9 +145,9 @@ export default function TimeTable() {
       ></div>
       <div className={showDetailedView ? "hide" : "timetable-wrapper"}>
         <h1>Timetable</h1>
-        {isLoaded === true ? (
+        {isLoaded === true && res !== undefined ? (
           res.map((e, index) => (
-            <div className="timetable-item">
+            <div className="timetable-item" key={index}>
               <h5>
                 {" "}
                 {String(
@@ -177,7 +177,11 @@ export default function TimeTable() {
                     : "status-light green"
                 }
               />
-              <h2>{e.tripUpdate.trip.tripId.replace("Train", "Train ")}</h2>
+              <h2>
+                {e.tripUpdate.trip.tripId
+                  .replace("Train", "Train ")
+                  .replace("Saturday", " Saturday")}
+              </h2>
               <h2>
                 {
                   RouteData.filter(

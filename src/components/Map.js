@@ -185,7 +185,9 @@ export default function Map() {
                 }) // add popups
                   .setHTML(
                     `<div class="trainPopup">
-                <h3>${train.vehicle.trip.tripId.replace("Train", "Train ")}</h3>
+                <h3>${train.vehicle.trip.tripId
+                  .replace("Train", "Train ")
+                  .replace("Saturday", " Saturday")}</h3>
                    <h4>Next Stop: ${
                      CustomFilter(train.vehicle.trip.tripId) !== "error" &&
                      CustomFilter(train.vehicle.trip.tripId) !== "404"
@@ -280,7 +282,9 @@ export default function Map() {
       } • Arriving At ${helper(r.tripUpdate.stopTimeUpdate, stop_id)}</h2>`;
     });
     if (results_display !== "")
-      return results_display.replaceAll("Train", "Train ");
+      return results_display
+        .replaceAll("Train", "Train ")
+        .replace("Saturday", " Saturday");
     return "No Train Is Currently On Its Way to this Station";
   }
   useEffect(() => {
@@ -306,6 +310,9 @@ export default function Map() {
         )
         .addTo(map.current);
     });
+  }, [tripUpdatesRes]);
+
+  useEffect(() => {
     // generate coordinates
     var penn_coordinates = [];
     var brunswick_coordinates = [];
@@ -426,6 +433,6 @@ export default function Map() {
         },
       });
     });
-  }, [tripUpdatesRes]);
+  }, []);
   return <div className="map-container" ref={mapContainer} />;
 }

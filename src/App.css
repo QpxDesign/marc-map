@@ -166,6 +166,15 @@ header {
 .green {
   background-color: green;
 }
+.red {
+  background-color: red;
+}
+.yellow {
+  background-color: yellow;
+}
+.gray {
+  background-color: gray;
+}
 .icon {
   color: #f97316;
   font-size: 3em;
@@ -199,7 +208,7 @@ header {
   position: absolute;
   right: 0;
   top: 0;
-  width: 25em;
+  width: 35em;
   background-color: black;
   height: 100%;
   z-index: 100;
@@ -210,6 +219,7 @@ header {
   padding-bottom: 2em !important;
   margin-right: -2px;
   overflow-y: scroll;
+  min-width: 20%;
 }
 .detailedview-wrapper h1 {
   margin: 0;
