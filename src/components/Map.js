@@ -37,7 +37,7 @@ export default function Map() {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v12",
+      style: "mapbox://styles/mapbox/streets-v12?optimize=true",
       center: [lng, lat],
       zoom: zoom,
     });
@@ -55,13 +55,13 @@ export default function Map() {
   async function getData() {
     fetch("https://marc-api-production.up.railway.app/mtaAPI")
       .then((r) => r.json())
-      .then((r2) => setRes(r2))
+      .then((r2) => (r2.entity !== undefined ? setRes(r2) : null))
       .catch((err) => err);
   }
   async function getTripUpdatesData() {
     fetch("https://marc-api-production.up.railway.app/TripUpdatesAPI")
       .then((r) => r.json())
-      .then((r2) => setTripUpdatesRes(r2))
+      .then((r2) => (r2.entity !== undefined ? setTripUpdatesRes(r2) : null))
       .catch((err) => err);
   }
   function FindFinalStop(tripId) {
@@ -167,6 +167,7 @@ export default function Map() {
         var result = trains.find(
           (marker) => marker.id === train.vehicle.trip.tripId
         );
+
         if (result !== undefined && result.length !== 0) {
           result.marker.setLngLat([longitude, latitude]);
           result.marker.setRotation(train.vehicle.position.bearing);

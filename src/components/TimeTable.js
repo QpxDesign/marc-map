@@ -17,6 +17,7 @@ export default function TimeTable() {
       .then(
         (result) => {
           setIsLoaded(true);
+
           setRes(result.entity);
         },
 
@@ -145,60 +146,60 @@ export default function TimeTable() {
       ></div>
       <div className={showDetailedView ? "hide" : "timetable-wrapper"}>
         <h1>Timetable</h1>
-        {isLoaded === true && res !== undefined ? (
-          res.map((e, index) => (
-            <div className="timetable-item" key={index}>
-              <h5>
-                {" "}
-                {String(
-                  Math.abs(
-                    Math.floor(
+        {isLoaded === true
+          ? res !== undefined
+            ? res.map((e, index) => (
+                <div className="timetable-item" key={index}>
+                  <h5>
+                    {" "}
+                    {String(
+                      Math.abs(
+                        Math.floor(
+                          e.tripUpdate.stopTimeUpdate[
+                            e.tripUpdate.stopTimeUpdate.length - 1
+                          ].arrival.delay / 60
+                        )
+                      )
+                    ).replace("NaN", "N/A ")}
+                    min{" "}
+                    {e.tripUpdate.stopTimeUpdate[
+                      e.tripUpdate.stopTimeUpdate.length - 1
+                    ].arrival > 0
+                      ? "early"
+                      : "late"}
+                  </h5>
+                  <div
+                    className={
                       e.tripUpdate.stopTimeUpdate[
                         e.tripUpdate.stopTimeUpdate.length - 1
-                      ].arrival.delay / 60
-                    )
-                  )
-                ).replace("NaN", "N/A ")}
-                min{" "}
-                {e.tripUpdate.stopTimeUpdate[
-                  e.tripUpdate.stopTimeUpdate.length - 1
-                ].arrival > 0
-                  ? "early"
-                  : "late"}
-              </h5>
-              <div
-                className={
-                  e.tripUpdate.stopTimeUpdate[
-                    e.tripUpdate.stopTimeUpdate.length - 1
-                  ].arrival.delay /
-                    60 >=
-                  5
-                    ? "status-light red"
-                    : "status-light green"
-                }
-              />
-              <h2>
-                {e.tripUpdate.trip.tripId
-                  .replace("Train", "Train ")
-                  .replace("Saturday", " Saturday")}
-              </h2>
-              <h2>
-                {
-                  RouteData.filter(
-                    (route) => route.id == e.tripUpdate.trip.routeId
-                  )[0].route_name
-                }{" "}
-                Line
-              </h2>
-              <HiArrowNarrowRight
-                className="icon"
-                onClick={() => handleDetailedViewEnable(e)}
-              />
-            </div>
-          ))
-        ) : (
-          <div>Loading...</div>
-        )}
+                      ].arrival.delay /
+                        60 >=
+                      5
+                        ? "status-light red"
+                        : "status-light green"
+                    }
+                  />
+                  <h2>
+                    {e.tripUpdate.trip.tripId
+                      .replace("Train", "Train ")
+                      .replace("Saturday", " Saturday")}
+                  </h2>
+                  <h2>
+                    {
+                      RouteData.filter(
+                        (route) => route.id == e.tripUpdate.trip.routeId
+                      )[0].route_name
+                    }{" "}
+                    Line
+                  </h2>
+                  <HiArrowNarrowRight
+                    className="icon"
+                    onClick={() => handleDetailedViewEnable(e)}
+                  />
+                </div>
+              ))
+            : "no trains today"
+          : "loading..."}
       </div>
     </>
   );
