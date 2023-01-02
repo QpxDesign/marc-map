@@ -121,6 +121,7 @@ export default function Map() {
 
   // populate maps with stop and line data
   function toTitleCase(str) {
+    return str;
     return str.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
@@ -300,11 +301,13 @@ export default function Map() {
           : ""
       } • Arriving At ${helper(r.tripUpdate.stopTimeUpdate, stop_id)}</h2>`;
     });
-    if (results_display !== "")
+    if (results_display !== "") {
       return results_display
         .replaceAll("Train", "Train ")
         .replaceAll("Saturday", " Saturday")
         .replaceAll("Sunday", " Sunday");
+    }
+
     return "No Train Is Currently On Its Way to this Station";
   }
   useEffect(() => {
@@ -338,9 +341,9 @@ export default function Map() {
   }, []);
   useEffect(() => {
     for (var i = 0; i < stops.length; i++) {
-      stops[i]
+      stops[i].marker._popup
         .setHTML(`<div class="stopPopup"><h1 class="stopName">${toTitleCase(
-        StopData.find((s) => s.stop_id == stops[i].id)
+        StopData.find((s) => s.stop_id == stops[i].id).stop_name
       )}</h1>
               <h2>${getTrainsFromStationId(stops[i].id)}</h2>
               </div>`);
