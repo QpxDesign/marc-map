@@ -2,10 +2,10 @@
   font-family: montserrat, sans-serif;
   color: white;
 }
-
 body {
   padding: 0;
   margin: 0;
+  background-color: black;
 }
 .alerts-wrapper {
   display: flex;
@@ -111,6 +111,7 @@ header {
   }
   .map-container {
     margin: 0;
+    height: 85vh !important;
   }
   .timetable-wrapper {
     margin: 0;
