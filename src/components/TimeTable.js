@@ -61,6 +61,7 @@ export default function TimeTable() {
       <div className={showDetailedView ? "detailedview-wrapper" : "hide"}>
         <AiFillCloseCircle
           className="close-icon"
+          role="button"
           onClick={() => handleDetailedViewDisable()}
         />
         <h1>
@@ -113,7 +114,7 @@ export default function TimeTable() {
                               .arrival.delay / 60
                           )
                         )
-                      ).replace("NaN", "N/A ")
+                      ).replace("NaN", "0 ")
                     : "0"}
                   min{" "}
                   {DetailedViewTrain.tripUpdate.stopTimeUpdate[
@@ -160,7 +161,7 @@ export default function TimeTable() {
                           ].arrival.delay / 60
                         )
                       )
-                    ).replace("NaN", "N/A ")}
+                    ).replace("NaN", "0 ")}
                     min{" "}
                     {e.tripUpdate.stopTimeUpdate[
                       e.tripUpdate.stopTimeUpdate.length - 1
@@ -198,7 +199,7 @@ export default function TimeTable() {
                   />
                 </div>
               ))
-            : "no trains today"
+            : "No Trains Found"
           : "loading..."}
       </div>
     </>
