@@ -55,14 +55,29 @@ export default function Map() {
   async function getData() {
     fetch("https://marc-api-production.up.railway.app/mtaAPI")
       .then((r) => r.json())
-      .then((r2) => (r2.entity !== undefined ? setRes(r2) : null))
+      .then((r2) =>
+        r2.entity !== undefined && !deepEqual(r2, res) ? setRes(r2) : null
+      )
       .catch((err) => err);
   }
   async function getTripUpdatesData() {
     fetch("https://marc-api-production.up.railway.app/TripUpdatesAPI")
       .then((r) => r.json())
-      .then((r2) => (r2.entity !== undefined ? setTripUpdatesRes(r2) : null))
+      .then((r2) =>
+        r2.entity !== undefined && !deepEqual(tripUpdatesRes, r2)
+          ? setTripUpdatesRes(r2)
+          : null
+      )
       .catch((err) => err);
+  }
+  function deepEqual(x, y) {
+    const ok = Object.keys,
+      tx = typeof x,
+      ty = typeof y;
+    return x && y && tx === "object" && tx === ty
+      ? ok(x).length === ok(y).length &&
+          ok(x).every((key) => deepEqual(x[key], y[key]))
+      : x === y;
   }
   function FindFinalStop(tripId) {
     try {
@@ -188,7 +203,8 @@ export default function Map() {
                     `<div class="trainPopup">
                 <h3>${train.vehicle.trip.tripId
                   .replace("Train", "Train ")
-                  .replace("Saturday", " Saturday")}</h3>
+                  .replace("Saturday", " Saturday")
+                  .replace("Sunday", " Sunday")}</h3>
                    <h4>Next Stop: ${
                      CustomFilter(train.vehicle.trip.tripId) !== "error" &&
                      CustomFilter(train.vehicle.trip.tripId) !== "404"
@@ -285,7 +301,8 @@ export default function Map() {
     if (results_display !== "")
       return results_display
         .replaceAll("Train", "Train ")
-        .replace("Saturday", " Saturday");
+        .replaceAll("Saturday", " Saturday")
+        .replaceAll("Sunday", " Sunday");
     return "No Train Is Currently On Its Way to this Station";
   }
   useEffect(() => {

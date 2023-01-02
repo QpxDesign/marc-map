@@ -14,7 +14,11 @@ export default function TimeTable() {
   async function getTripUpdatesData() {
     fetch("https://marc-api-production.up.railway.app/TripUpdatesAPI")
       .then((r) => r.json())
-      .then((r2) => (r2.entity !== undefined ? setRes(r2.entity) : null))
+      .then((r2) =>
+        r2.entity !== undefined && !deepEqual(r2.entity, res)
+          ? setRes(r2.entity)
+          : null
+      )
       .catch((err) => err);
   }
   useEffect(() => {
@@ -23,7 +27,7 @@ export default function TimeTable() {
   useEffect(() => {
     const interval = setInterval(() => {
       getTripUpdatesData();
-    }, 10000);
+    }, 10_000);
 
     return () => clearInterval(interval);
   }, []);
@@ -32,7 +36,15 @@ export default function TimeTable() {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
   }
-
+  function deepEqual(x, y) {
+    const ok = Object.keys,
+      tx = typeof x,
+      ty = typeof y;
+    return x && y && tx === "object" && tx === ty
+      ? ok(x).length === ok(y).length &&
+          ok(x).every((key) => deepEqual(x[key], y[key]))
+      : x === y;
+  }
   function handleDetailedViewEnable(tripId) {
     window.scroll(0, 0);
     document.body.classList.add("noscroll");
@@ -69,6 +81,7 @@ export default function TimeTable() {
             ? DetailedViewTrain.tripUpdate.trip.tripId
                 .replace("Train", "Train ")
                 .replace("Saturday", " Saturday")
+                .replace("Sunday", " Sunday")
             : "error"}
         </h1>
         <h2>
@@ -183,7 +196,8 @@ export default function TimeTable() {
                   <h2>
                     {e.tripUpdate.trip.tripId
                       .replace("Train", "Train ")
-                      .replace("Saturday", " Saturday")}
+                      .replace("Saturday", " Saturday")
+                      .replace("Sunday", " Sunday")}
                   </h2>
                   <h2>
                     {

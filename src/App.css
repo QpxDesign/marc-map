@@ -89,7 +89,7 @@ header {
   background-color: black;
   padding-bottom: 1em;
   overflow-y: scroll;
-  gap: 1em;
+  grid-gap: 1em 1em;
 }
 .status-light {
   width: 1em;
@@ -125,14 +125,19 @@ header {
   font-family: monospace;
   align-items: center;
   justify-content: center;
-  grid-gap: 0em 1em;
+  grid-gap: 1em 1em;
   letter-spacing: 0.1em;
   display: flex;
   flex-direction: row;
-  padding: 0 0.75em;
+  padding: 1.5em 0.75em;
   border-radius: 1em;
   max-width: 90%;
   background-color: rgba(255, 255, 255, 0.1);
+}
+.timetable-item h1,
+h2,
+h5 {
+  margin: 0;
 }
 .trainPopup,
 .stopPopup {
