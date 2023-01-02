@@ -8,24 +8,24 @@ export default function TimeTable() {
   const [res, setRes] = useState([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
-
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [DetailedViewTrain, setDetailedViewTrain] = useState({});
+
+  async function getTripUpdatesData() {
+    fetch("https://marc-api-production.up.railway.app/TripUpdatesAPI")
+      .then((r) => r.json())
+      .then((r2) => (r2.entity !== undefined ? setRes(r2.entity) : null))
+      .catch((err) => err);
+  }
   useEffect(() => {
-    fetch("https://marc-api-production.up.railway.app/tripUpdatesAPI")
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
+    getTripUpdatesData();
+  }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getTripUpdatesData();
+    }, 10000);
 
-          setRes(result.entity);
-        },
-
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
+    return () => clearInterval(interval);
   }, []);
   function toTitleCase(str) {
     return str.replace(/\w\S*/g, function (txt) {

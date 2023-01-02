@@ -38,7 +38,7 @@ export default function Header() {
           </p>
           <h2>Contact Him</h2>
           <p>
-            If you need support with MarcMap, or have questions regarding it's
+            If you need support with MarcMap, or have questions regarding its
             devlopment, please reach out to him at quinn@qpxdesign.com
           </p>
           <div className="spacer"></div>

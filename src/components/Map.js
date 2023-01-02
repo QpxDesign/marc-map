@@ -25,7 +25,7 @@ export default function Map() {
     const interval = setInterval(() => {
       getData();
       getTripUpdatesData();
-    }, 15000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
