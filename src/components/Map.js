@@ -25,7 +25,7 @@ export default function Map() {
     const interval = setInterval(() => {
       getData();
       getTripUpdatesData();
-    }, 10000);
+    }, 15_000);
 
     return () => clearInterval(interval);
   }, []);
@@ -337,102 +337,118 @@ export default function Map() {
     });
     map.current.on("load", () => {
       // penn
-      map.current.addSource("penn", {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: penn_coordinates,
+      if (!map.current.getLayer("penn")) {
+        map.current.addSource("penn", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates: penn_coordinates,
+            },
           },
-        },
-      });
-      map.current.addSource("camden", {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: camden_coordinates,
+        });
+      }
+      if (!map.current.getLayer("camden")) {
+        map.current.addSource("camden", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates: camden_coordinates,
+            },
           },
-        },
-      });
-      map.current.addSource("brunswick", {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: brunswick_coordinates,
+        });
+      }
+      if (!map.current.getLayer("brunswick")) {
+        map.current.addSource("brunswick", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates: brunswick_coordinates,
+            },
           },
-        },
-      });
-      map.current.addSource("fredrick", {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: fredrick_coordinates,
+        });
+      }
+      if (!map.current.getLayer("fredrick")) {
+        map.current.addSource("fredrick", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates: fredrick_coordinates,
+            },
           },
-        },
-      });
-      map.current.addLayer({
-        id: "penn",
-        type: "line",
-        source: "penn",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#D82A38",
-          "line-width": 8,
-        },
-      });
-      map.current.addLayer({
-        id: "camden",
-        type: "line",
-        source: "camden",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#FF5624",
-          "line-width": 8,
-        },
-      });
-      map.current.addLayer({
-        id: "brunswick",
-        type: "line",
-        source: "brunswick",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#F0AC1D",
-          "line-width": 8,
-        },
-      });
-      map.current.addLayer({
-        id: "fredrick",
-        type: "line",
-        source: "fredrick",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#F0AC1D",
-          "line-width": 8,
-        },
-      });
+        });
+      }
+      if (!map.current.getLayer("penn")) {
+        map.current.addLayer({
+          id: "penn",
+          type: "line",
+          source: "penn",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#D82A38",
+            "line-width": 8,
+          },
+        });
+      }
+      if (!map.current.getLayer("camden")) {
+        map.current.addLayer({
+          id: "camden",
+          type: "line",
+          source: "camden",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#FF5624",
+            "line-width": 8,
+          },
+        });
+      }
+      if (!map.current.getLayer("brunswick")) {
+        map.current.addLayer({
+          id: "brunswick",
+          type: "line",
+          source: "brunswick",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#F0AC1D",
+            "line-width": 8,
+          },
+        });
+      }
+      if (!map.current.getLayer("fredrick")) {
+        map.current.addLayer({
+          id: "fredrick",
+          type: "line",
+          source: "fredrick",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#F0AC1D",
+            "line-width": 8,
+          },
+        });
+      }
     });
   }, []);
   return <div className="map-container" ref={mapContainer} />;
