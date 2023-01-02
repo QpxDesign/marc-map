@@ -13,6 +13,8 @@ mapboxgl.accessToken =
 
 export default function Map() {
   const [trains, setTrains] = useState([]);
+  const [stops, setStops] = useState([]);
+
   const [res, setRes] = useState([]);
   const [tripUpdatesRes, setTripUpdatesRes] = useState([]);
   // map params
@@ -307,10 +309,9 @@ export default function Map() {
   }
   useEffect(() => {
     StopData.map((stop) => {
-      getTrainsFromStationId(stop.stop_id);
       const latitude = stop.stop_lat;
       const longitude = stop.stop_lon;
-      new mapboxgl.Marker({
+      var marker = new mapboxgl.Marker({
         color: "#004D93",
       })
         .setLngLat([longitude, latitude])
@@ -322,12 +323,28 @@ export default function Map() {
               `<div class="stopPopup"><h1 class="stopName">${toTitleCase(
                 stop.stop_name
               )}</h1>
-              <h2>${getTrainsFromStationId(stop.stop_id)}</h2>
               </div>`
             )
         )
         .addTo(map.current);
+      setStops((current) => [
+        ...current,
+        {
+          id: stop.stop_id,
+          marker,
+        },
+      ]);
     });
+  }, []);
+  useEffect(() => {
+    for (var i = 0; i < stops.length; i++) {
+      stops[i]
+        .setHTML(`<div class="stopPopup"><h1 class="stopName">${toTitleCase(
+        StopData.find((s) => s.stop_id == stops[i].id)
+      )}</h1>
+              <h2>${getTrainsFromStationId(stops[i].id)}</h2>
+              </div>`);
+    }
   }, [tripUpdatesRes]);
 
   useEffect(() => {

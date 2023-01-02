@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiFillQuestionCircle, AiFillCloseCircle } from "react-icons/ai";
 
 export default function Header() {
@@ -18,6 +18,13 @@ export default function Header() {
       enablePopup();
     }
   }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      window.location.reload();
+    }, 100_000);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <>
       <div className={showPopup ? "popup-background" : "hide"}>
