@@ -302,6 +302,7 @@ export default function Map() {
       } • Arriving At ${helper(r.tripUpdate.stopTimeUpdate, stop_id)}</h2>`;
     });
     if (results_display !== "") {
+      console.log(results_display);
       return results_display
         .replaceAll("Train", "Train ")
         .replaceAll("Saturday", " Saturday")
