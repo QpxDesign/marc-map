@@ -63,7 +63,7 @@ export default function Map() {
       .catch((err) => err);
   }
   async function getTripUpdatesData() {
-    fetch("https://marc-api-production.up.railway.app/TripUpdatesAPI")
+    fetch("https://api.marcmap.app/TripUpdatesAPI")
       .then((r) => r.json())
       .then((r2) =>
         r2.entity !== undefined && !deepEqual(tripUpdatesRes, r2)
