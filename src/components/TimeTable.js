@@ -12,7 +12,7 @@ export default function TimeTable() {
   const [DetailedViewTrain, setDetailedViewTrain] = useState({});
 
   async function getTripUpdatesData() {
-    fetch("https://marc-api-production.up.railway.app/TripUpdatesAPI")
+    fetch("https://api.marcmap.app/TripUpdatesAPI")
       .then((r) => r.json())
       .then((r2) =>
         r2.entity !== undefined && !deepEqual(r2.entity, res)
