@@ -55,7 +55,7 @@ export default function Map() {
     map.current.addControl(new mapboxgl.NavigationControl());
   });
   async function getData() {
-    fetch("https://marc-api-production.up.railway.app/mtaAPI")
+    fetch("https://api.marcmap.app/mtaAPI")
       .then((r) => r.json())
       .then((r2) =>
         r2.entity !== undefined && !deepEqual(r2, res) ? setRes(r2) : null
