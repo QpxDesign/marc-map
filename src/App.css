@@ -359,3 +359,10 @@ header .icon {
 .noscroll-all {
   overflow: hidden !important;
 }
+a {
+  text-decoration: inherit;
+  color: inherit;
+}
+a:hover {
+  text-decoration: underline;
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AiFillQuestionCircle, AiFillCloseCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [showPopup, setShowPopup] = useState(false);
@@ -56,7 +57,9 @@ export default function Header() {
       </div>
 
       <header>
-        <h1>MarcMap</h1>
+        <Link to="/">
+          <h1>MarcMap</h1>
+        </Link>
         <AiFillQuestionCircle
           role="button"
           className="icon"
