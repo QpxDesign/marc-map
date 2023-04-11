@@ -163,6 +163,7 @@ export default function TimeTable() {
         {isLoaded === true
           ? res !== undefined
             ? res.map((e, index) => (
+                  e.tripUpdate.trip.scheduleRelationship !== "CANCELED" ?
                 <div className="timetable-item" key={index}>
                   <h5>
                     {" "}
@@ -211,7 +212,7 @@ export default function TimeTable() {
                     className="icon"
                     onClick={() => handleDetailedViewEnable(e)}
                   />
-                </div>
+                </div> : ""
               ))
             : "No Trains Found"
           : "loading..."}
